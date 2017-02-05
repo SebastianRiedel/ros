@@ -100,6 +100,9 @@ def get_message_class(message_type, reload_on_error=False):
     if cls is None:
         # try old loader w/ bootstrapping
         cls = _get_message_or_service_class('msg', message_type, reload_on_error=reload_on_error)
+    if cls is None:
+        # fallback in case published topic is a log topic for service call requests or responses
+        cls = _get_message_or_service_class('srv', message_type, reload_on_error=reload_on_error)
     if cls:
         _message_class_cache[message_type] = cls
     return cls
